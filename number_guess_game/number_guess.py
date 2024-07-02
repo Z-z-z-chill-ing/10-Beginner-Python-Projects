@@ -1,13 +1,13 @@
-import random, re
+import random
 
 lives = 10
-continue_bool = True
+continueBool = True
 wins = 0
 
-def logic(guess, lives, wins):
+def logic(guess, lives, wins, rand_num):
     if (abs(guess - rand_num) == 0):
         wins += 1
-        print(f"Congrets, you guess correct number, it was {rand_num}.")
+        print(f"Congrets, you've guessed a correct number, it was {rand_num}.")
         print(f"Your total count of wins: {wins}.\n")
         return False, lives, wins
     elif (abs(guess - rand_num) > 5 and abs(guess - rand_num) <= 10):
@@ -30,21 +30,26 @@ def logic(guess, lives, wins):
         print("Your guess is wrong.")
         print(f"{lives} lives remaining.\n")
         return True, lives, wins
-
-while (lives > 0):
-    limit = input("Up to what number guessing number should be: ")
-    while (bool(re.search(pattern='[a-zA-Z]', string=limit))):
-        print("The value can only be an integer.\n")
-        limit = input("Up to what number guessing number should be: ")
-    rand_num = random.randint(1, int(limit))
-    while (continue_bool and lives):
-        guess = int(input("\nGuess the number: "))
-        continue_bool, lives, wins = logic(guess, lives, wins)
-    if (lives == 0):
-        print("Sorry, but it still was a great run.")
-    continue_game = input("Do you wish to continue playing?[y/n]: ")
-    if (continue_game.lower() == "n"):
-        break
+    
+def start_game(lives, continueBool, wins):
+    limit = input("Enter the limit of the guessing number: ")
+    while (not limit.strip().isnumeric()):
+        print("Limit value shouldn't be empty, and should contain numerical value.")
+        limit = input("Enter the limit of the guessing number: ")
+    randInt = random.randint(1, int(limit))
+    while (lives and continueBool):
+        guessNumber = input("Enter your guess: ")
+        while (not guessNumber.strip().isnumeric()):
+            print("Guess value shouldn't be empty, and should contain numerical value.")
+            guessNumber = input("Enter your guess: ")
+        continueBool, lives, wins = logic(guess=int(guessNumber), lives=lives, wins=wins, rand_num=randInt)
+    continueChoice = input("Do you wish to continue?[y/n]: ")
+    if (continueChoice.lower() == "n"):
+        return
     else:
+        continueBool = True
         lives = 10
-        continue_bool = True
+        start_game(lives, continueBool, wins)
+
+if __name__ == "__main__":
+    start_game(lives, continueBool, wins)
