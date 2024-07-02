@@ -1,0 +1,8 @@
++--------+-----------------------------+---------------+--------------+
+|  Name  |         Description         | Time Interval | Completeness |
++--------+-----------------------------+---------------+--------------+
+|  Mop   |        Mop the floors       |  14:00-15:00  |   Not done   |
+| Vacuum |        Vacuum a rugs        |  15:00-15:30  |     Done     |
+|  Play  | Play some games on my phone |  15:30-15:40  |   Not done   |
+|  H.W   |        Do my homework       |  16:00-18:00  |   Not done   |
++--------+-----------------------------+---------------+--------------+
