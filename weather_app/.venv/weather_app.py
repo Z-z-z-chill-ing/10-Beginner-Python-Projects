@@ -28,7 +28,7 @@ def display_data(data, forecastDay):
             visibilityKm = data.get("current").get("vis_km")
             visibilityMl = data.get("current").get("vis_miles")
             """Forecast"""
-            forecast = data.get("forecast").get("forecastday")[day]  # Assuming we're interested in the first forecast day
+            forecast = data.get("forecast").get("forecastday")[day]
             forecast_date = forecast.get("date")
             forecast_date_epoch = forecast.get("date_epoch")
             # Daytime weather conditions
