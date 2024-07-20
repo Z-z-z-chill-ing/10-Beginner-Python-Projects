@@ -89,7 +89,7 @@ class SciPy():
             return res
         return None
     # 4
-    def divison(self, *nums: Union[int, float]) -> Union[int, float, None]:
+    def division(self, *nums: Union[int, float]) -> Union[int, float, None]:
         """Performs division over entered numbers. Order of numbers inputed will effect the result."""
         try:
             res = nums[0]
@@ -493,7 +493,7 @@ scipy = SciPy()
 print(scipy.addition(13,10,100,115))
 print(scipy.subtraction(13,-10,-100,115))
 print(scipy.multiplication(13,-10,-100,115))
-print(scipy.divison(115,5))
+print(scipy.division(115,5))
 print(scipy.square_root(169))
 print(scipy.n_root(169, 3))
 print(scipy.exponent(3))
