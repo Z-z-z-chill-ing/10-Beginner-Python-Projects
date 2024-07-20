@@ -490,7 +490,7 @@ class SciPy():
             print(f"Error: {e}")
 
 scipy = SciPy()
-""" print(scipy.addition(13,10,100,115))
+print(scipy.addition(13,10,100,115))
 print(scipy.subtraction(13,-10,-100,115))
 print(scipy.multiplication(13,-10,-100,115))
 print(scipy.divison(115,5))
@@ -521,21 +521,4 @@ print(scipy.matrix_scaler_multiplication(matrixScl, 10))
 print(scipy.matrix_determinant(matrix_2))
 print(scipy.matrix_determinant(matrix_3))
 print(scipy.matrix_determinant(matrix_4))
-print(scipy.matrix_dot_product(matrix_dot_prod_1, matrix_dot_prod_2)) """
-
-def roll_dice():
-    # Function to simulate rolling a die (1-6)
-    return random.randint(1, 6)
-
-# Simulate rolling two dice 50 times and record the products
-products = [(roll_dice() * roll_dice()) for _ in range(50)]
-
-# Count how many times the product is 15
-count_product_15 = products.count(12)
-
-# Print the results and the count of the product being 15
-for i, product in enumerate(products, start=1):
-    print(f"Roll {i}: Product = {product}")
-
-print(f"\nNumber of times the product of two dice is 15: {count_product_15}")
-
+print(scipy.matrix_dot_product(matrix_dot_prod_1, matrix_dot_prod_2))
