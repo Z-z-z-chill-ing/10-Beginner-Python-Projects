@@ -1,5 +1,6 @@
 import math, random, numpy as np
 from typing import Union
+from decimal import Decimal, getcontext
 
 spinner_nums_equally_likely: dict[str, Union[int, float]] = {
     "1": 10,
@@ -237,32 +238,30 @@ class SciPy():
             return res
         return None
     # 19
-    def scientific_notation(self, num: Union[str, int, float]) -> str:
+    def scientific_notation(num: Union[str, int, float]) -> str:
         """Converts number from standard to scientific notation."""
+        if float(num) == 0:
+            return "0.0 * 10^0"
+        
+        num_str = str(num)
+        if 'e' in num_str or 'E' in num_str:
+            return num_str
+        
+        num = float(num)
+        sign = "-" if num < 0 else ""
+        num = abs(num)
+        
         power = 0
-        num_list = [n for n in str(num) if not n == "."]
-        length = len(num_list)
-        for i in range(0, length):
-            if (not num_list[i] == "0"):
-                num_list.insert(i + 1, ".")
-                break
-        num_str = "".join(num_list)
-        num_mod = float(num_str)
-        num_original = float(num)
-        print(num_mod, num_original)
-        if (num_original > num_mod):
-            while (not int(num_original) == int(num_mod)):
-                print(num_mod, num_original)
-                num_mod *= 10
+        if num >= 10:
+            while num >= 10:
+                num /= 10
                 power += 1
-            return f"{float(num_str)} * 10^{power}"
-        if (num_original < num_mod):
-            while (not int(num_original) == int(num_mod)):
-                print(num_mod, num_original)
-                num_original *= 10
-                power += 1
-            power = 0 - power
-            return f"{float(num_str)} * 10^{power}"
+        elif num < 1:
+            while num < 1:
+                num *= 10
+                power -= 1
+        
+        return f"{sign}{num} * 10^{power}"
     # 20
     def percent_of_change(self, original: Union[int, float], new: Union[int, float]) -> Union[float, None]:
         """Calculates the percent of change of two numbers."""
@@ -558,10 +557,12 @@ print(scipy.arcsin(1))
 print(scipy.arccos(1))
 print(scipy.arctan(math.pi))
 # Scientific Notation
-print(scipy.scientific_notation(12345))  # Should be in scientific notation format
-print(scipy.scientific_notation(0.000123)) # Should be in scientific notation format
-print(scipy.scientific_notation(3425.000123)) # Should be in scientific notation format
-print(scipy.scientific_notation(0029404.5403)) # Should be in scientific notation format
+print(scipy.scientific_notation(1234))  # Should be in scientific notation format
+print(scipy.scientific_notation(0.000567)) # Should be in scientific notation format
+print(scipy.scientific_notation(0)) # Should be in scientific notation format
+print(scipy.scientific_notation(-9876)) # Should be in scientific notation format
+print(scipy.scientific_notation(1234567890123456789)) # Should be in scientific notation format
+print(scipy.scientific_notation(3.14)) # Should be in scientific notation format
 
 # Percentage Change
 print(scipy.percent_of_change(100, 120))  # 20.0
