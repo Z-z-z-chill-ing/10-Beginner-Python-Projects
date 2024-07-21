@@ -1,35 +1,30 @@
 import math, random, numpy as np
 from typing import Union
 
-spinner_1: dict[str, Union[int, float]] = {
-    "Eat an apple": 60,
-    "Eat a chocolate bar": 21.5,
-    "Eat a spinach": 12.5,
-    "Eat a garlic": 5.5,
-    "Eat a stone": 0.5
+spinner_nums_equally_likely: dict[str, Union[int, float]] = {
+    "1": 10,
+    "2": 10,
+    "3": 10,
+    "4": 10,
+    "5": 10,
+    "6": 10,
+    "7": 10,
+    "8": 10,
+    "9": 10,
+    "10": 10,
 }
 
-spinner_2: dict[str, Union[int, float]] = {
-    "Not lucky": 90,
-    "Pretty lucky": 8,
-    "Really lucky": 1.9,
-    "Mega lucky": 0.1
+spinner_eat_healthy: dict[str, Union[int, float]] = {
+    "Eat a salad": 50,
+    "Eat a soup": 40,
+    "Eat a candy": 9.5,
+    "Eat a bag of chips": 0.5
 }
 
 matrixOne = np.array([[[1/2, 2/2, 3/2]], [[4/2, 5/2, 6/2]], [[7/2, 8/2, 9/2]], [[10/2, 11/2, 12/2]]])
 matrixTwo = np.array([[[1/2, 2/2, 3/2]], [[4/2, 5/2, 6/2]], [[7/2, 8/2, 9/2]], [[10/2, 11/2, 12/2]]])
 matrixSub = np.array([[[3/2, 2/2, 1/2]], [[6/2, 5/2, 4/2]], [[9/2, 8/2, 7/2]], [[12/2, 11/2, 10/2]]])
 matrixScl = np.array([[[1, 2, 3]], [[4, 5, 6]], [[7, 8, 9]], [[10, 11, 12]], [[13, 14, 15]], [[16, 17, 18]]])
-matrix_2 = np.array([[1,2], [3,4]])
-matrix_3 = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-matrix_4 = np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]])
-matrix_dot_prod_1 = np.array([[1, 2, 3, 4],
-                     [4, 5, 6, 7],
-                     [7, 8, 9, 10]])
-matrix_dot_prod_2 = np.array([[1, 2, 3],
-                     [4, 5, 6],
-                     [7, 8, 9],
-                     [10, 11, 12]])
 
 def length_of_matrix(matrix: Union[np.ndarray, list]) -> int:
     elements = []
@@ -145,12 +140,16 @@ class SciPy():
     # 9
     def factorial(self, base: int) -> Union[int, None]:
         """Calculates the result of a facorial."""
-        if (check_is_numeric(base) and base >= 0):
-            res = math.factorial(base)
-            return res
-        return None
+        try:
+            if (base < 0):
+                raise ValueError("Base of a factorial can't be negative.")
+            if (check_is_numeric(base) and base >= 0):
+                res = math.factorial(base)
+                return res
+        except ValueError as e:
+            print(f"Error: {e}")
     # 10
-    def log(self, x: Union[int, float], base: int) -> Union[float, None]:
+    def log(self, base: int, x: Union[int, float]) -> Union[float, None]:
         """Calculates the natural log(x) function."""
         try:
             if x <= 0:
@@ -240,14 +239,30 @@ class SciPy():
     # 19
     def scientific_notation(self, num: Union[str, int, float]) -> str:
         """Converts number from standard to scientific notation."""
-        numList = [n for n in str(num) if (not n == ".")]
-        numOriginalLength = len(numList)
-        numList.insert(1, ".")
-        num = float("".join(numList))
-        numList = [n for n in str(num) if (not n == ".")]
-        numAfterLength = len(numList)
-        exponent = numOriginalLength - numAfterLength
-        return f"{num} * 10^{exponent}"
+        power = 0
+        num_list = [n for n in str(num) if not n == "."]
+        length = len(num_list)
+        for i in range(0, length):
+            if (not num_list[i] == "0"):
+                num_list.insert(i + 1, ".")
+                break
+        num_str = "".join(num_list)
+        num_mod = float(num_str)
+        num_original = float(num)
+        print(num_mod, num_original)
+        if (num_original > num_mod):
+            while (not int(num_original) == int(num_mod)):
+                print(num_mod, num_original)
+                num_mod *= 10
+                power += 1
+            return f"{float(num_str)} * 10^{power}"
+        if (num_original < num_mod):
+            while (not int(num_original) == int(num_mod)):
+                print(num_mod, num_original)
+                num_original *= 10
+                power += 1
+            power = 0 - power
+            return f"{float(num_str)} * 10^{power}"
     # 20
     def percent_of_change(self, original: Union[int, float], new: Union[int, float]) -> Union[float, None]:
         """Calculates the percent of change of two numbers."""
@@ -256,6 +271,8 @@ class SciPy():
                 return new
             if (check_is_numeric(original, new)):
                 res = (abs(original - new) / original) * 100
+                if (new < original):
+                    res = 0 - res
                 return res
             return None
         except Exception as e:
@@ -480,7 +497,7 @@ class SciPy():
                         subarray.append(a)
                         if (len(subarray) == cols_1):
                             e = sum(subarray)
-                            subarray_result.append(e)
+                            subarray_result.append(int(e))
                             subarray.clear()
                         if (len(subarray_result) == cols_2):
                             result.append(list(subarray_result))
@@ -490,35 +507,96 @@ class SciPy():
             print(f"Error: {e}")
 
 scipy = SciPy()
-print(scipy.addition(13,10,100,115))
-print(scipy.subtraction(13,-10,-100,115))
-print(scipy.multiplication(13,-10,-100,115))
-print(scipy.division(115,5))
-print(scipy.square_root(169))
-print(scipy.n_root(169, 3))
-print(scipy.exponent(3))
-print(scipy.power(3,3))
-print(scipy.factorial(5))
-print(scipy.log(5, 3))
-print(scipy.log10(5))
+# Addition
+print(scipy.addition(5, 3))  # 8
+print(scipy.addition(-5, 5))  # 0
+
+# Subtraction
+print(scipy.subtraction(10, 4))  # 6
+print(scipy.subtraction(4, 10))  # -6
+
+# Multiplication
+print(scipy.multiplication(7, 6))  # 42
+print(scipy.multiplication(-3, -3))  # 9
+
+# Division
+print(scipy.division(15, 3))  # 5
+print(scipy.division(7, 0))   # Should handle division by zero gracefully
+
+# Square Root
+print(scipy.square_root(16))  # 4.0
+print(scipy.square_root(-16)) # Should handle negative input gracefully
+
+# N-th Root
+print(scipy.n_root(27, 3))  # 3.0
+print(scipy.n_root(16, 4))  # 2.0
+
+# Exponentiation
+print(scipy.power(2, 3))  # 8
+print(scipy.power(5, 0))  # 1
+
+# Power
+print(scipy.power(2, 3))  # 8
+print(scipy.power(5, -1))  # 0.2
+# Factorial
+print(scipy.factorial(5))  # 120
+print(scipy.factorial(0))  # 1
+print(scipy.factorial(-1)) # Should handle negative input gracefully
+
+# Logarithms
+print(scipy.log(100, 10))  # 2.0
+print(scipy.log(8, 2))     # 3.0
+
 print(scipy.hypotenuse(3,4))
-print(scipy.sin(math.pi))
-print(scipy.cos(math.pi))
-print(scipy.tan(math.pi))
+
+# Trigonometric Functions
+print(scipy.sin(math.pi / 2))   # 1.0
+print(scipy.cos(math.pi))     # -1.0
+print(scipy.tan(math.pi / 4))  # 1.0
+
 print(scipy.arcsin(1))
 print(scipy.arccos(1))
 print(scipy.arctan(math.pi))
-print(scipy.scientific_notation("294.04341000"))
-print(scipy.percent_of_change(64, 30))
-print(scipy.permutation(10, 3))
-print(scipy.combination(10, 3))
-print(scipy.coin_flip_simulation(5))
-print(scipy.dice_roll_simulation(5))
-print(scipy.spinner_spin_simulation(5, **spinner_1))
+# Scientific Notation
+print(scipy.scientific_notation(12345))  # Should be in scientific notation format
+print(scipy.scientific_notation(0.000123)) # Should be in scientific notation format
+print(scipy.scientific_notation(3425.000123)) # Should be in scientific notation format
+print(scipy.scientific_notation(0029404.5403)) # Should be in scientific notation format
+
+# Percentage Change
+print(scipy.percent_of_change(100, 120))  # 20.0
+print(scipy.percent_of_change(200, 150))  # -25.0
+
+# Permutation
+print(scipy.permutation(5, 3))  # 60
+print(scipy.permutation(3, 3))  # 6
+
+# Combination
+print(scipy.combination(5, 3))  # 10
+print(scipy.combination(6, 2))  # 15
+
+# Coin Flip
+print(scipy.coin_flip_simulation(1))  # Should return 'Heads' or 'Tails'
+
+# Dice Roll
+print(scipy.dice_roll_simulation(1))  # Should return a number between 1 and 6
+
+# Spinner Spin
+print(scipy.spinner_spin_simulation(10, **spinner_eat_healthy))  # Should return a number between 1 and 10
+
 print(scipy.matrix_addition(matrixOne, matrixTwo))
 print(scipy.matrix_subtraction(matrixSub, matrixTwo))
 print(scipy.matrix_scaler_multiplication(matrixScl, 10))
-print(scipy.matrix_determinant(matrix_2))
-print(scipy.matrix_determinant(matrix_3))
-print(scipy.matrix_determinant(matrix_4))
-print(scipy.matrix_dot_product(matrix_dot_prod_1, matrix_dot_prod_2))
+
+# Matrix Determinant
+matrix_2x2 = np.array([[1, 2], [3, 4]])
+matrix_4x4 = np.array([[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])
+
+print(scipy.matrix_determinant(matrix_2x2))  # -2.0
+print(scipy.matrix_determinant(matrix_4x4))  # 1.0
+
+# Matrix Dot Product
+matrix_a = np.array([[1, 2], [3, 4]])
+matrix_b = np.array([[5, 6], [7, 8]])
+
+print(scipy.matrix_dot_product(matrix_a, matrix_b))  # Should match np.dot(matrix_a, matrix_b)
